@@ -1,0 +1,4 @@
+pandas==2.2.3
+gradio_rangeslider==0.0.7
+gradio==4.44.1
+pycountry==24.6.1
