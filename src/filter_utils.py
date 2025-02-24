@@ -84,30 +84,7 @@ def filter(df, language_list, parameters, input_price, output_price, multimodal,
         df = df[df[tc.LANGS].apply(lambda x: all(lang in x for lang in language_list))]
 
     if not df.empty:
-        # Split dataframe by Open Weight, ensuring mutual exclusivity
-        open_weight_true = df[
-            (df[tc.OPEN_WEIGHT] == True) & 
-            (~df[tc.PARAMS].isna())
-        ]
-        open_weight_false = df[
-            (df[tc.OPEN_WEIGHT] == False) | 
-            (df[tc.PARAMS].isna()) |
-            (~df.index.isin(open_weight_true.index))  # Catch any remaining rows
-        ]
-        
-        # Verify no overlap and no data loss
-        assert len(df) == len(open_weight_true) + len(open_weight_false), "Data loss detected"
-        assert len(set(open_weight_true.index) & set(open_weight_false.index)) == 0, "Duplicate entries detected"
-        
-        # Filter only the open weight models based on parameters
-        if not open_weight_true.empty:
-            filtered_open = open_weight_true[
-                (open_weight_true[tc.PARAMS] >= parameters[0]) & 
-                (open_weight_true[tc.PARAMS] <= parameters[1])
-            ]
-            
-            # Combine filtered open weight models with unfiltered commercial models
-            df = pd.concat([filtered_open, open_weight_false])
+        df = df[(df[tc.DUMMY_PARAMS] >= parameters[0]) & (df[tc.DUMMY_PARAMS] <= parameters[1])]
 
     if not df.empty:  # Check if df is non-empty
         df = df[(df[tc.INPUT] >= input_price[0]) & (df[tc.INPUT] <= input_price[1])]
@@ -116,6 +93,8 @@ def filter(df, language_list, parameters, input_price, output_price, multimodal,
         df = df[(df[tc.OUTPUT] >= output_price[0]) & (df[tc.OUTPUT] <= output_price[1])]
 
     if not df.empty:  # Check if df is non-empty
+        if tc.TEXT in multimodal:
+            df = df[(df[tc.SINGLE_IMG] == False) & (df[tc.MULT_IMG] == False) & (df[tc.AUDIO] == False) & (df[tc.VIDEO] == False) ]
         if tc.SINGLE_IMG in multimodal:
             df = df[df[tc.SINGLE_IMG] == True]
         if tc.MULT_IMG in multimodal:
@@ -125,8 +104,12 @@ def filter(df, language_list, parameters, input_price, output_price, multimodal,
         if tc.VIDEO in multimodal:
             df = df[df[tc.VIDEO] == True]
 
-    # if not df.empty:  # Check if df is non-empty
-    #     df = df[(df['Context Size (k)'] >= (context[0])) & (df['Context Size (k)'] <= (context[1]))]
+    if not df.empty:  # Check if df is non-empty
+        # Convert 'Context Size (k)' to numeric, coercing errors to NaN
+        context_size = pd.to_numeric(df['Context Size (k)'], errors='coerce').fillna(0)
+        
+        # Apply the filter
+        df = df[(context_size >= context[0]) & (context_size <= context[1])]
 
     if not df.empty:  # Check if df is non-empty
         if tc.OPEN in open_weight and tc.COMM not in open_weight:

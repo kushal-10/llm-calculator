@@ -4,13 +4,34 @@ import os
 from gradio_rangeslider import RangeSlider
 import calendar
 import datetime
+import numpy as np
+from huggingface_hub import HfApi
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from src.filter_utils import filter, filter_cols
 from src.process_data import merge_data
 import assets.text_content as tc
 
+""" 
+CONSTANTS
+"""
+# For restarting the gradio application every 24 Hrs
+TIME = 86400  # in seconds # Reload will not work locally - requires HFToken # The app launches locally as expected - only without the reload utility
+
+"""
+AUTO RESTART HF SPACE
+"""
+HF_TOKEN = os.environ.get("H4_TOKEN", None)
+api = HfApi()
+
+def restart_space():
+    api.restart_space(repo_id=tc.HF_REPO, token=HF_TOKEN)
+
+
+
 # Main Leaderboard containing everything
-text_leaderboard = pd.read_csv(os.path.join('assets', 'merged_data.csv'))
+# text_leaderboard = pd.read_csv(os.path.join('assets', 'merged_data.csv'))
+text_leaderboard = merge_data()
 text_leaderboard = text_leaderboard.sort_values(by=tc.CLEMSCORE, ascending=False)  
 
 # When displaying latency values
@@ -188,9 +209,9 @@ with llm_calc_app:
             ############# Modality selection checkbox ###############
             with gr.Row():
                 multimodal_checkbox = gr.CheckboxGroup(
-                    choices=[tc.SINGLE_IMG, tc.MULT_IMG, tc.AUDIO, tc.VIDEO],
+                    choices=[tc.TEXT, tc.SINGLE_IMG, tc.MULT_IMG, tc.AUDIO, tc.VIDEO],
                     value=[],
-                    label="Additional Modalities 📷🎧🎬",
+                    label="Modalities 📝📷🎧🎬",
                 )
                 
             
@@ -334,4 +355,14 @@ with llm_calc_app:
 
     llm_calc_app.load()
 llm_calc_app.queue()
+
+# Add scheduler to auto-restart the HF space at every TIME interval and update every component each time
+scheduler = BackgroundScheduler()
+scheduler.add_job(restart_space, 'interval', seconds=TIME)
+scheduler.start()
+
+# Log current start time and scheduled restart time
+print(datetime.datetime.now())
+print(f"Scheduled restart at {datetime.datetime.now() + datetime.timedelta(seconds=TIME)}")
+
 llm_calc_app.launch()
