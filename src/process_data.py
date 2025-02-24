@@ -183,6 +183,20 @@ def merge_data():
     # Drop model_name column
     merged_df.drop(columns=['model_name'], inplace=True)
     
+    # Clean up context and convert to integer
+    merged_df[tc.CONTEXT] = merged_df[tc.CONTEXT].astype(str).str.replace('k', '', regex=False)
+    merged_df[tc.CONTEXT] = pd.to_numeric(merged_df[tc.CONTEXT], errors='coerce').fillna(0).astype(int)
+
+    # Handle commercial model parameters / Set to max of open models
+    # Find the maximum value of tc.PARAMS where tc.OPEN_WEIGHT is True
+    max_params_value = merged_df.loc[merged_df[tc.OPEN_WEIGHT], tc.PARAMS].max()
+
+    # Create a new dummy PARAM column
+    merged_df[tc.DUMMY_PARAMS] = merged_df.apply(
+        lambda row: max_params_value if not row[tc.OPEN_WEIGHT] else row[tc.PARAMS],
+        axis=1
+    )
+
     return merged_df
 
 if __name__=='__main__':
