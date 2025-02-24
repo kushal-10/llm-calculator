@@ -17,7 +17,7 @@ DEFAULT_MODEL_NAME = "Unnamed: 0"
 DEFAULT_CLEMSCORE = "-, clemscore"
 
 MODEL_NAME = "Model Name"
-CLEMSCORE = "Clemscore"
+CLEMSCORE = "Score (0-100)"
 LATENCY = "Latency (s)"
 PARAMS = "Parameters (B)"
 DUMMY_PARAMS = "Parameters Dummy (B)"
@@ -41,7 +41,7 @@ TEMP_DATE = "Temp Date"
 OPEN = "Open-Weight"
 COMM = "Commercial"
 
-TITLE = """<h1 align="center" id="space-title"> LLM Calculator ⚖️⚡ 📏💰</h1> <p align="center">Performance, latency metrics are based on <a href="https://clembench.github.io/" target="_blank">clembench</a> .</p>"""
+TITLE = """<h1 align="center" id="space-title"> LLM Calculator ⚖️⚡ 📏💰</h1> <p align="center">Score, latency metrics are based on <a href="https://clembench.github.io/" target="_blank">clembench</a> .</p>"""
 
 HF_REPO = "colab-potsdam/llm-calculator"
 # Date Picker (set as Dropdown until datetime object is fixed)
