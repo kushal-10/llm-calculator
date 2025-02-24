@@ -2,7 +2,7 @@ import os
 
 # Data Sources
 CLEMBENCH_RUNS_REPO = "https://raw.githubusercontent.com/clembench/clembench-runs/main/"
-REGISTRY_URL = "https://raw.githubusercontent.com/clp-research/clembench/refs/heads/refactor_model_registry/backends/model_registry.json"
+REGISTRY_URL = "https://raw.githubusercontent.com/kushal-10/clembench/refs/heads/refactor_model_registry/backends/model_registry.json"
 BENCHMARK_FILE = "benchmark_runs.json"
 
 LATENCY_FOLDER = os.path.join("Addenda", "Latency")
@@ -20,6 +20,7 @@ MODEL_NAME = "Model Name"
 CLEMSCORE = "Clemscore"
 LATENCY = "Latency (s)"
 PARAMS = "Parameters (B)"
+DUMMY_PARAMS = "Parameters Dummy (B)"
 RELEASE_DATE = 'Release Date'
 OPEN_WEIGHT = 'Open Weight'
 LANGS = "Languages"
@@ -28,6 +29,7 @@ LICENSE_NAME = "License Name"
 LICENSE_URL = "License URL"
 SINGLE_IMG = "Single Image"
 MULT_IMG = "Multi Image"
+TEXT = "Text-Only"
 AUDIO = "Audio"
 VIDEO = "Video"
 INPUT = "Input $/1M tokens"
@@ -41,6 +43,7 @@ COMM = "Commercial"
 
 TITLE = """<h1 align="center" id="space-title"> LLM Calculator ⚖️⚡ 📏💰</h1>"""
 
+HF_REPO = "Koshti10/LLMCalc"
 # Date Picker (set as Dropdown until datetime object is fixed)
 START_YEAR = "2020"
 MONTH_MAP = {
