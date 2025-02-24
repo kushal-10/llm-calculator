@@ -1,5 +1,5 @@
 ---
-title: LLMCalc
+title: LLM-Calculator
 emoji: 🏆
 colorFrom: red
 colorTo: pink
