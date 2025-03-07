@@ -75,7 +75,9 @@ def clean_model_name(model_name: str) -> str:
 def merge_data():
 
     mm_latency_df, mm_result_df, text_latency_df, text_result_df = fetch_version_metadata()
+
     registry_data = fetch_registry_data()
+    print(registry_data)
     with open(PRICING_PATH, 'r') as f:
         pricing_data = json.load(f)
 
