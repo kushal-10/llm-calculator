@@ -2,7 +2,7 @@ import os
 
 # Data Sources
 CLEMBENCH_RUNS_REPO = "https://raw.githubusercontent.com/clembench/clembench-runs/main/"
-REGISTRY_URL = "https://raw.githubusercontent.com/kushal-10/clemcore/refs/heads/refactor_model_registry/backends/model_registry.json"
+REGISTRY_URL = "https://raw.githubusercontent.com/clp-research/clemcore/refs/heads/refactor_model_registry/backends/model_registry.json"
 BENCHMARK_FILE = "benchmark_runs.json"
 
 LATENCY_FOLDER = os.path.join("Addenda", "Latency")
