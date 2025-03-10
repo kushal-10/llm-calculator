@@ -75,7 +75,9 @@ def clean_model_name(model_name: str) -> str:
 def merge_data():
 
     mm_latency_df, mm_result_df, text_latency_df, text_result_df = fetch_version_metadata()
+
     registry_data = fetch_registry_data()
+
     with open(PRICING_PATH, 'r') as f:
         pricing_data = json.load(f)
 
@@ -198,9 +200,3 @@ def merge_data():
     )
 
     return merged_df
-
-if __name__=='__main__':
-    merged_df = merge_data()
-    # # Save to CSV
-    output_path = os.path.join('assets', 'merged_data.csv')
-    merged_df.to_csv(output_path, index=False)    
